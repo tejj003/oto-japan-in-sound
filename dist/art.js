@@ -135,6 +135,116 @@ function torii(x,t,b,m,h,p,motion){
  }x.globalAlpha=1;
  x.restore();ring(x,540,cy,R+13,p.ink,.8);
 }
+// Fullscreen scenes use screen coordinates, with no poster frame or typography.
+// Scale uniformly by height so fish, moons and timber retain their proportions.
+function screenPond(x,w,t,b,m,h,p,motion){
+ const low=Math.tanh(Math.max(0,b)),melody=Math.tanh(Math.max(0,m));
+ x.drawImage(lakeTextures[0],0,0,w,1000);
+ const cx=w*.5,cy=520,spread=w/1500;
+ for(let i=0;i<30;i++){
+  const rx=(115+i*25)*spread,ry=88+i*19;
+  x.beginPath();for(let j=0;j<=180;j++){
+   const a=j/180*TAU,ripple=Math.sin(a*3+t*.4+i*.13)*(3+low*10)+Math.sin(a*7-t*.2)*(2+melody*2);
+   const px=cx+Math.cos(a)*(rx+ripple),py=cy+Math.sin(a)*(ry+ripple);
+   j?x.lineTo(px,py):x.moveTo(px,py);
+  }
+  x.globalAlpha=i%5===0?.44+low*.15:.14+melody*.08;
+  x.strokeStyle=p.line;x.lineWidth=i%5===0?1.5+low: .8;x.stroke();
+ }
+ for(const beat of (motion.beats??[]).slice(-5)){
+  const phase=Math.min(1,beat.age/3);x.globalAlpha=wakeFade(beat,3)*beat.strength*.85;
+  x.beginPath();x.ellipse(cx,cy,(100+phase*740)*spread,80+phase*490,0,0,TAU);
+  x.strokeStyle=p.pearl;x.lineWidth=2.5+beat.strength*2;x.stroke();
+ }
+ x.globalAlpha=1;const label=Math.min(87,w*.09);
+ circle(x,cx,cy,label,p.sun);ring(x,cx,cy,label*.86,p.deep,.8);circle(x,cx,cy,3,p.deep);
+ const swim=motion.swimTime??t,rx=w*.31,ry=280,size=Math.min(1.04,w/1000);
+ for(let i=0;i<3;i++){
+  const a=-2.5+i*TAU/3+swim*.05,drift=Math.sin(swim*.4+i)*7;
+  const angle=Math.atan2(ry*Math.cos(a),-rx*Math.sin(a))+Math.PI/2;
+  koiFish(x,cx+Math.cos(a)*(rx+drift),cy+Math.sin(a)*(ry+drift),angle,size,swim+i,p,i!==1);
+ }
+ x.globalAlpha=1;
+}
+function screenFuji(x,w,t,b,m,h,p,motion){
+ const low=Math.tanh(Math.max(0,b)),melody=Math.tanh(Math.max(0,m));
+ x.fillStyle=p.coral;x.fillRect(0,0,w,1000);
+ const center=w*.57,base=860,peak=278,half=Math.max(w*.39,440);
+ const summit=center-60,moonX=center+half*.32+(motion.moonX??0),moonY=290+(motion.moonY??0);
+ x.drawImage(fujiMoon,moonX-196,moonY-196,392,392);
+ // A broad, continuous silhouette gives the mountain room across a desktop.
+ const mountain=new Path2D();mountain.moveTo(center-half,base);
+ mountain.bezierCurveTo(center-half*.5,795,summit-150,460,summit-36,peak);
+ mountain.quadraticCurveTo(summit,peak+5,summit+40,peak);
+ mountain.bezierCurveTo(center+half*.4,645,center+half*.53,792,center+half,base);
+ mountain.lineTo(w+100,1100);mountain.lineTo(-100,1100);mountain.closePath();
+ x.fillStyle=p.deep;x.fill(mountain);x.save();x.clip(mountain);
+ shape(x,[[summit+15,peak],[center+half*.7,base],[w+100,1100],[w+100,200]],p.water);
+ const snow=new Path2D();snow.moveTo(summit-240,170);snow.lineTo(summit+260,170);snow.lineTo(summit+260,447);
+ snow.bezierCurveTo(summit+177,417,summit+126,420,summit+100,429);
+ snow.bezierCurveTo(summit+80,437,summit+82,468,summit+64,460);
+ snow.bezierCurveTo(summit+47,451,summit+40,421,summit+26,435);
+ snow.bezierCurveTo(summit+8,452,summit+4,467,summit-10,454);
+ snow.bezierCurveTo(summit-25,436,summit-30,429,summit-48,445);
+ snow.bezierCurveTo(summit-73,467,summit-81,451,summit-109,442);
+ snow.lineTo(summit-240,457);snow.closePath();x.fillStyle=p.pearl;x.fill(snow);
+ for(let i=0;i<14;i++){
+  x.globalAlpha=i%3===0?.38+low*.18:.17+melody*.1;x.lineWidth=i%3===0?2.3+low:1.1;x.strokeStyle=p.pearl;x.beginPath();
+  for(let j=0;j<=150;j++){
+   const px=w*j/150,crest=Math.exp(-(((px-center)/(half*.43+i*10))**2));
+   const py=535+i*24-crest*(66+i*2)+Math.sin(px*.008-t*.85+i*.28)*(3+melody*9);
+   j?x.lineTo(px,py):x.moveTo(px,py);
+  }x.stroke();
+ }
+ for(const beat of (motion.beats??[]).slice(-5)){
+  const phase=Math.min(1,beat.age/3.2);x.globalAlpha=wakeFade(beat,3.2)*beat.strength*.8;x.lineWidth=3;x.strokeStyle=p.pearl;x.beginPath();
+  for(let j=0;j<=120;j++){const px=w*j/120,py=480+phase*430-Math.exp(-(((px-center)/(half*.5))**2))*40+Math.sin(px*.012-t*.4)*4;j?x.lineTo(px,py):x.moveTo(px,py);}x.stroke();
+ }
+ x.globalAlpha=.1;x.drawImage(lakeTextures[1],0,170,w,930);x.restore();
+ const colors=['#53637d','#455973','#354d68','#263e59'];
+ for(let i=0;i<4;i++){
+  const ridge=new Path2D();for(let j=0;j<=150;j++){const px=w*j/150,py=817+i*57+Math.sin(px*.003+i*.6)*26+Math.sin(px*.009-i*.2)*5;j?ridge.lineTo(px,py):ridge.moveTo(px,py);}
+  const fill=new Path2D(ridge);fill.lineTo(w,1050);fill.lineTo(0,1050);fill.closePath();x.fillStyle=colors[i];x.fill(fill);
+  x.save();x.clip(fill);x.globalAlpha=.22+low*.13;x.lineWidth=2;wave(x,841+i*57,t*2.2,4+melody*6,p.pearl,i*.4,0,w);x.restore();
+ }
+ if(pineGroveLoaded){const size=Math.min(570,w*.55);x.drawImage(pineGrove,w*.015,1000-size,size,size);}
+}
+function screenTorii(x,w,t,b,m,h,p,motion){
+ const low=Math.tanh(Math.max(0,b)),melody=Math.tanh(Math.max(0,m));
+ x.drawImage(lakeTextures[2],0,0,w,1000);
+ const cx=w*.5,scale=Math.min(1.4,w/690),y=240,foot=y+361*scale;
+ const moonX=w*.59,moonY=286,r=Math.min(210,w*.25);
+ x.save();x.translate(moonX,moonY);x.rotate(motion.moonAngle??0);
+ x.beginPath();x.arc(0,0,r,0,TAU);x.clip();const crescent=new Path2D();crescent.arc(0,0,r,0,TAU);
+ crescent.moveTo(r*1.16,r*-.16);crescent.arc(r*.21,r*-.16,r*.95,0,TAU);
+ x.fillStyle=p.sun;x.fill(crescent,'evenodd');x.restore();
+ for(let i=0;i<6;i++){x.globalAlpha=.09;ring(x,moonX,moonY,r+20+i*16,p.pearl,.8);}x.globalAlpha=1;
+ const ridge=[[0,650],[w*.14,602],[w*.28,632],[w*.43,611],[w*.59,635],[w*.77,598],[w,629],[w,710],[0,710]];
+ shape(x,ridge,p.deep);
+ for(let i=0;i<15;i++){
+  x.globalAlpha=i%3===0?.3+low*.2:.11+melody*.09;x.lineWidth=i%3===0?2.4+low*1.6:1.1;
+  wave(x,665+i*26,t*2.5,3+melody*8+low*3,p.pearl,i*.3,0,w);
+ }x.globalAlpha=1;
+ gate(x,cx,y,scale,p.coral);
+ line(x,[[cx-150*scale,y+54*scale],[cx-150*scale,foot-4]],p.pearl,1);
+ line(x,[[cx+135*scale,y+54*scale],[cx+135*scale,foot-4]],p.pearl,1);
+ line(x,[[cx-210*scale,y+83*scale],[cx+210*scale,y+83*scale]],p.pearl,.8);
+ for(let row=0;row<270;row+=2){
+  const depth=row/270,width=620*scale/1.18*(1+depth*.12+melody*.08);
+  const shift=Math.sin(row*.17-t*1.4)*(2+depth*8)*(.6+melody*.6)+Math.sin(row*.4+t*.8)*low*3;
+  x.globalAlpha=.56*(1-row/330);x.drawImage(gateReflection,0,447-row*1.5,620,3.5,cx-width/2+shift,foot+row,width,2.5);
+ }x.globalAlpha=1;
+ for(const origin of [cx-142.5*scale,cx+142.5*scale])for(const beat of (motion.beats??[]).slice(-5)){
+  const phase=Math.min(1,beat.age/3);x.globalAlpha=wakeFade(beat,3)*beat.strength*.85;
+  x.strokeStyle=p.pearl;x.lineWidth=2.2+beat.strength*2.8;x.beginPath();x.ellipse(origin,foot+phase*110,18+phase*w*.16,4+phase*38,0,0,Math.PI);x.stroke();
+ }x.globalAlpha=1;
+}
+export function renderFullscreenArtwork(x,scene,t=0,b=0,m=0,h=0,motion={}){
+ const scale=x.canvas.height/1000,w=x.canvas.width/scale,p=palettes[scene];
+ x.save();x.setTransform(scale,0,0,scale,0,0);x.fillStyle=p.bg;x.fillRect(0,0,w,1000);
+ [screenPond,screenFuji,screenTorii][scene](x,w,t,b,m,h,p,motion);
+ x.globalAlpha=.55;x.drawImage(grain,0,0,w,1000);x.restore();
+}
 export function renderArtwork(x,scene,t=0,b=0,m=0,h=0,withType=true,motion={}){
  x.save();x.setTransform(x.canvas.width/1080,0,0,x.canvas.height/1920,0,0);const p=palettes[scene],s=scenes[scene];x.fillStyle=p.bg;x.fillRect(0,0,1080,1920);
  if(withType){

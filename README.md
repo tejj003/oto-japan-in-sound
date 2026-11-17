@@ -43,7 +43,7 @@ python3 -m http.server 4173 --bind 127.0.0.1 --directory dist
 
 The studio responds to the track loaded into it. Music playing in another tab or application is not captured.
 
-Select **Fullscreen** below the preview for an artwork-only view. Music and motion continue, with every studio control hidden. The complete 9:16 print stays uncropped; its paper color fills the surrounding screen. Press **Escape**, or click/tap the artwork, to return. Browsers that block native fullscreen use an artwork-only view inside the current viewport.
+Select **Fullscreen** below the preview for an edge-to-edge artwork composed for your screen. On a desktop, the pond, mountain landscape, or torii scene expands into a landscape composition with no poster text or studio controls. Music and motion continue. The view adapts when you resize or rotate the screen, while PNG and video exports remain 1080 × 1920. Press **Escape**, or click/tap the artwork, to return. Browsers that block native fullscreen use the same immersive view inside the current viewport.
 
 ### Exports
 

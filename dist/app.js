@@ -1,12 +1,16 @@
-import { scenes, renderArtwork, artworkReady, createMotion, advanceMotion, artworkBackground } from './art.js';
+import { scenes, renderArtwork, renderFullscreenArtwork, artworkReady, createMotion, advanceMotion, artworkBackground } from './art.js';
 import { AudioReactivity } from './reactivity.js';
 import { setupFullscreen } from './fullscreen.js';
 const $ = (s) => document.querySelector(s);
 const canvas=$('#art'), ctx=canvas.getContext('2d',{alpha:false}), audio=$('#audio');
-setupFullscreen($('.canvas-wrap'),$('#fullscreenBtn'));
+const presentation=setupFullscreen($('.canvas-wrap'),$('#fullscreenBtn'),()=>paintPresentation());
+const presentationContext=presentation.canvas.getContext('2d',{alpha:false});
 const state={ scene:Math.min(2,Math.max(0,Number(new URLSearchParams(location.search).get('scene'))||0)), animated:!matchMedia('(prefers-reduced-motion: reduce)').matches, time:0, bass:0, mid:0, high:0, response:.65, loaded:false, recording:false };
 const motion=createMotion();
-function paintArtwork(){renderArtwork(ctx,state.scene,state.time,state.bass,state.mid,state.high,true,motion);}
+function paintPresentation(){
+  if(presentation.isActive())renderFullscreenArtwork(presentationContext,state.scene,state.time,state.bass,state.mid,state.high,motion);
+}
+function paintArtwork(){renderArtwork(ctx,state.scene,state.time,state.bass,state.mid,state.high,true,motion);paintPresentation();}
 let audioContext,analyser,gain,recordDestination,frequency,reactivity,sourceURL,filmURL,recorder,recordStart=0,recordTimer,demoURL;
 const meter=[...document.querySelectorAll('.audio-meter i')];
 const feedback=(message)=>{$('#feedback').textContent=message;};
