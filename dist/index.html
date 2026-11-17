@@ -1,0 +1,65 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#181a1f">
+  <meta name="description" content="Turn your music into three living Japanese-inspired prints. Create and record original vertical artwork in your browser.">
+  <link rel="icon" href="icon.svg" type="image/svg+xml">
+  <title>Oto: Japan in sound</title>
+  <link rel="preload" as="image" href="assets/pine-grove.png">
+  <link rel="preload" as="font" type="font/woff2" href="fonts/DMSans.woff2" crossorigin>
+  <link rel="preload" as="font" type="font/woff2" href="fonts/ZenKakuGothicNew.woff2" crossorigin>
+  <link rel="stylesheet" href="tokens.css">
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="typography.css">
+</head>
+<body>
+  <a class="skip-link" href="#studio">Skip to studio</a>
+  <header class="masthead">
+    <a class="wordmark" href="./" aria-label="Oto home"><span lang="ja">音</span> oto<span class="wordmark-caption">Sound into scenery</span></a>
+    <span class="edition">An audiovisual playground</span>
+    <button class="text-button" id="aboutBtn" aria-expanded="false" aria-controls="about">How it works <span aria-hidden="true">?</span></button>
+  </header>
+  <div id="about" class="about" hidden>Choose a print, upload your music, then press play. Bass moves the composition; melodies shape the details. Record a 1080 × 1920 film with audio, or save a still. Your music stays in this browser.</div>
+  <div class="studio-heading"><div><h1>A little Japan.<br> A world of sound.</h1><p>Give your favorite track a place to come alive.</p></div><div class="edition-note"><span>Japan collection</span><span>Three artworks in rhythm</span></div></div>
+  <main class="studio" id="studio">
+    <aside class="collection" aria-label="Artwork collection">
+      <div class="section-line"><h2>Choose a scene</h2><span>3 artworks</span></div>
+      <p class="intro">A place for every feeling.</p>
+      <div class="artworks" role="group" aria-label="Choose an artwork">
+        <button class="artwork selected" data-scene="0" aria-pressed="true"><canvas width="180" height="240" aria-hidden="true"></canvas><span class="artwork-copy"><span class="artwork-index">01 / 水</span><strong>Koi no oto</strong><span>The sound of water</span></span><span class="selected-mark" aria-hidden="true">✓</span></button>
+        <button class="artwork" data-scene="1" aria-pressed="false"><canvas width="180" height="240" aria-hidden="true"></canvas><span class="artwork-copy"><span class="artwork-index">02 / 山</span><strong>Fuji no hibiki</strong><span>Echoes of the mountain</span></span><span class="selected-mark" aria-hidden="true">✓</span></button>
+        <button class="artwork" data-scene="2" aria-pressed="false"><canvas width="180" height="240" aria-hidden="true"></canvas><span class="artwork-copy"><span class="artwork-index">03 / 門</span><strong>Torii no yume</strong><span>A gateway to dreaming</span></span><span class="selected-mark" aria-hidden="true">✓</span></button>
+      </div>
+      <div class="palette-note"><span class="swatches" aria-hidden="true"><i></i><i></i><i></i></span><span>Midnight, apricot & pearl.<br>Inspired by Japan. Moved by you.</span></div>
+    </aside>
+
+    <section class="preview" aria-label="Live artwork preview">
+      <div class="preview-meta"><span id="previewName">01 / Koi no oto</span><span class="format-tag">9:16 portrait</span></div>
+      <div class="art-stage"><div class="canvas-wrap"><canvas id="art" width="1080" height="1920" role="img" aria-label="Animated Japanese print of koi swimming in a vinyl record pond"></canvas><noscript><p>Enable JavaScript to draw the artwork and connect your music.</p></noscript></div><span class="stage-corner top-left" aria-hidden="true"></span><span class="stage-corner top-right" aria-hidden="true"></span><span class="stage-corner bottom-left" aria-hidden="true"></span><span class="stage-corner bottom-right" aria-hidden="true"></span></div>
+      <div class="preview-bottom"><span id="liveState">Ambient preview</span><button class="text-button" id="stillBtn" title="Save a 1080 × 1920 PNG"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3v12m-4-4 4 4 4-4M5 16v5h14v-5"/></svg>Save still</button><button class="icon-button" id="motionBtn" aria-label="Pause animation" aria-pressed="false" title="Pause animation"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 6v12M15 6v12"/></svg></button></div>
+    </section>
+
+    <aside class="controls" aria-label="Music and export controls">
+      <section class="sound-section"><div class="section-line"><h2>Add your soundtrack</h2><span class="step-number">01</span></div>
+        <label class="upload" id="dropzone"><input type="file" id="audioFile" accept="audio/*,.mp3,.wav,.m4a,.aac,.ogg,.flac"><svg viewBox="0 0 32 32" aria-hidden="true"><path d="M16 22V6m-6 6 6-6 6 6M6 22v5h20v-5"/></svg><strong>Drop your music here</strong><span>or click to choose a file</span><small>MP3, WAV, M4A & more</small></label>
+        <button id="demoBtn" class="demo-button"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 18V5l11-2v13M9 8l11-2"/><ellipse cx="6" cy="18" rx="3" ry="2"/><ellipse cx="17" cy="16" rx="3" ry="2"/></svg><span>Try the studio soundtrack</span><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m9 5 10 7-10 7Z"/></svg></button>
+        <div class="player"><div class="track-title"><strong id="trackName">Your music, your artwork.</strong><span id="trackDetail">Choose a file or try the demo.</span></div><div class="transport"><button class="play-button" id="playBtn" disabled aria-label="Play music"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m9 5 10 7-10 7Z"/></svg></button><div class="timeline"><input type="range" id="seek" min="0" max="100" step="0.1" value="0" aria-label="Track position" disabled><div class="time"><span id="elapsed">0:00</span><span id="duration">0:00</span></div></div></div></div>
+      </section>
+      <section class="response-section"><div class="section-line"><h2>Find your rhythm</h2><span class="step-number">02</span></div>
+        <label class="range-label" for="sensitivity"><span>Music response</span><output id="responseValue">65%</output></label><input type="range" id="sensitivity" min="0" max="100" value="65">
+        <div class="range-ends"><span>Subtle</span><span>Expressive</span></div>
+        <label class="range-label volume-label" for="volume"><span>Listening volume</span><output id="volumeValue">70%</output></label><input type="range" id="volume" min="0" max="100" value="70">
+        <div class="audio-meter" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
+        <div class="signal-status"><span id="signalStatus" role="status">Add a track to activate the response</span><span class="beat-label" aria-hidden="true">Beat <i id="beatLight"></i></span></div>
+      </section>
+      <section class="export-section"><div class="section-line"><h2>Take it with you</h2><span class="step-number">03</span></div><div class="export-row"><label for="recordLength">Film length</label><select id="recordLength"><option value="15">15 seconds</option><option value="30" selected>30 seconds</option><option value="60">60 seconds</option></select></div><button class="primary-button" id="recordBtn" disabled><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="6"/></svg><span>Record a film</span></button><p class="export-note" id="exportNote">Vertical video, with your soundtrack.</p><a class="download-link" id="downloadLink" hidden>Download your film</a></section>
+      <p class="feedback" id="feedback" role="status" aria-live="polite"></p>
+    </aside>
+  </main>
+  <footer><span>Slow art. Your soundtrack.</span><span>1080 × 1920 / Made for your next story</span></footer>
+  <audio id="audio" preload="metadata"></audio>
+  <script type="module" src="app.js"></script>
+</body>
+</html>

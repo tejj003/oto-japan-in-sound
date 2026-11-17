@@ -1,0 +1,13 @@
+node_modules/
+.DS_Store
+.env
+.env.*
+!.env.example
+.openai/
+.hallmark/
+qa/
+*.log
+*.tgz
+*.mp4
+*.webm
+*.wav

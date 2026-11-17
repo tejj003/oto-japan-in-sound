@@ -1,0 +1,17 @@
+{
+  "name": "oto-japan-in-sound",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "A music-reactive Japanese art studio built with Canvas and the Web Audio API.",
+  "scripts": {
+    "dev": "node scripts/serve.mjs",
+    "check": "node --check dist/app.js && node --check dist/art.js && node --check dist/reactivity.js && node --check scripts/serve.mjs"
+  },
+  "engines": { "node": ">=18" },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/tejj003/oto-japan-in-sound.git"
+  },
+  "license": "UNLICENSED"
+}
