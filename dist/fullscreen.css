@@ -1,0 +1,44 @@
+.preview-bottom { flex-wrap: wrap; }
+.art-only { overflow: hidden; }
+.art-only .skip-link,
+.art-only .masthead,
+.art-only #about,
+.art-only .studio-heading,
+.art-only .collection,
+.art-only .controls,
+.art-only footer,
+.art-only .preview-meta,
+.art-only .preview-bottom,
+.art-only .stage-corner { visibility: hidden; }
+
+/* Extend the print's paper color around its complete, uncropped 9:16 canvas. */
+.art-only .canvas-wrap {
+  position: fixed;
+  inset: 0;
+  z-index: 400;
+  display: grid;
+  place-items: center;
+  width: 100%;
+  max-width: none;
+  height: 100vh;
+  height: 100dvh;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  border-radius: 0;
+  aspect-ratio: auto;
+  background: var(--fullscreen-paper);
+  cursor: none;
+  outline: none;
+}
+.art-only #art {
+  width: min(100%, calc(100vh * 9 / 16));
+  width: min(100%, calc(100dvh * 9 / 16));
+  height: auto;
+  max-height: 100%;
+  aspect-ratio: 9 / 16;
+  object-fit: contain;
+}
+@media (max-width: 680px) {
+  .preview-bottom #liveState { flex-basis: 100%; }
+}

@@ -1,7 +1,9 @@
-import { scenes, renderArtwork, artworkReady, createMotion, advanceMotion } from './art.js';
+import { scenes, renderArtwork, artworkReady, createMotion, advanceMotion, artworkBackground } from './art.js';
 import { AudioReactivity } from './reactivity.js';
+import { setupFullscreen } from './fullscreen.js';
 const $ = (s) => document.querySelector(s);
 const canvas=$('#art'), ctx=canvas.getContext('2d',{alpha:false}), audio=$('#audio');
+setupFullscreen($('.canvas-wrap'),$('#fullscreenBtn'));
 const state={ scene:Math.min(2,Math.max(0,Number(new URLSearchParams(location.search).get('scene'))||0)), animated:!matchMedia('(prefers-reduced-motion: reduce)').matches, time:0, bass:0, mid:0, high:0, response:.65, loaded:false, recording:false };
 const motion=createMotion();
 function paintArtwork(){renderArtwork(ctx,state.scene,state.time,state.bass,state.mid,state.high,true,motion);}
@@ -11,6 +13,7 @@ const feedback=(message)=>{$('#feedback').textContent=message;};
 const time=(n)=>{n=Number.isFinite(n)?n:0;return `${Math.floor(n/60)}:${String(Math.floor(n%60)).padStart(2,'0')}`;};
 function chooseScene(index){
   state.scene=index;
+  $('.canvas-wrap').style.setProperty('--fullscreen-paper',artworkBackground(index));
   document.querySelectorAll('.artwork').forEach((el,i)=>{el.classList.toggle('selected',i===index);el.setAttribute('aria-pressed',String(i===index));});
   $('#previewName').textContent=`0${index+1} / ${scenes[index].name}`;canvas.setAttribute('aria-label',scenes[index].label);
   const url=new URL(location.href);url.searchParams.set('scene',index);history.replaceState(null,'',url);

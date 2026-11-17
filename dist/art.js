@@ -9,6 +9,7 @@ const palettes=[
   {bg:'#e8e6df',ink:'#283451',muted:'#5d6576',line:'#8f9aab',water:'#344866',deep:'#263650',coral:'#dc9d85',sun:'#aebbd0',pearl:'#e8e6df'}
 ];
 const TAU=Math.PI*2;
+export function artworkBackground(scene){return palettes[scene].bg;}
 export function createMotion(){return {swimTime:0,moonPhase:0,moonEnergy:0,moonAngle:0,moonX:0,moonY:0,pulse:0,beats:[]};}
 export function advanceMotion(motion,dt,bass,mid,playing){
  // Swimming follows elapsed time; the separate moon response eases over several beats.
